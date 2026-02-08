@@ -47,7 +47,14 @@ const _textToSeed = (text) => {
 const _normalizeSeed = (seed) => {
   if (seed === undefined || seed === null) return DEFAULT_SEED;
   if (typeof seed === 'string') return _textToSeed(seed);
-  const n = Math.abs(Math.floor(Number(seed)));
+  const num = Number(seed);
+  const abs = Math.abs(num);
+  // Handle floats between 0 and 1 (e.g. Math.random()) by scaling up
+  if (abs > 0 && abs < 1) {
+    const str = String(abs).replace('0.', '');
+    return Number(str) || DEFAULT_SEED;
+  }
+  const n = Math.floor(abs);
   return n === 0 ? DEFAULT_SEED : n;
 };
 
@@ -434,6 +441,19 @@ const redOrBlack = (options = {}) => {
   return _digitSum(seed) % 2 === 1 ? 'red' : 'black';
 };
 
+/**
+ * Generate a random seed using crypto.getRandomValues for true entropy.
+ * Pass the result as { seed: randomSeed() } to any pdrng function
+ * for non-deterministic behavior.
+ *
+ * @returns {number}
+ */
+const randomSeed = () => {
+  const buffer = new Uint32Array(1);
+  crypto.getRandomValues(buffer);
+  return buffer[0] || DEFAULT_SEED;
+};
+
 // ─── Game Functions ──────────────────────────────────────────────────────────
 
 /**
@@ -626,7 +646,7 @@ const bingo = (options = {}) => {
  *
  * @param {Object} [options={}] - Options
  * @param {number|string} [options.seed] - Custom seed (default: 814)
- * @returns {string} e.g. "#814148"
+ * @returns {string} e.g. "#a81414"
  */
 const color = (options = {}) => {
   const seed = _normalizeSeed(options.seed);
@@ -656,6 +676,7 @@ pdrng.spin = spin;
 pdrng.roll = roll;
 pdrng.bingo = bingo;
 pdrng.color = color;
+pdrng.randomSeed = randomSeed;
 pdrng.DEFAULT_SEED = DEFAULT_SEED;
 
 // ─── Exports ─────────────────────────────────────────────────────────────────
@@ -683,5 +704,6 @@ export {
   roll,
   bingo,
   color,
+  randomSeed,
   DEFAULT_SEED
 };

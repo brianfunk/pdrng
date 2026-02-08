@@ -19,6 +19,7 @@ import pdrng, {
   roll,
   bingo,
   color,
+  randomSeed,
   DEFAULT_SEED
 } from '../index.js';
 
@@ -521,6 +522,7 @@ describe('method attachment', () => {
     expect(typeof pdrng.roll).toBe('function');
     expect(typeof pdrng.bingo).toBe('function');
     expect(typeof pdrng.color).toBe('function');
+    expect(typeof pdrng.randomSeed).toBe('function');
   });
 
   it('should produce same results via method or named export', () => {
@@ -559,11 +561,46 @@ describe('custom seeds', () => {
   });
 });
 
+// ─── Utility: randomSeed() ───────────────────────────────────────────────────
+
+describe('randomSeed()', () => {
+  it('should return a positive integer', () => {
+    const seed = randomSeed();
+    expect(typeof seed).toBe('number');
+    expect(seed).toBeGreaterThan(0);
+    expect(Number.isInteger(seed)).toBe(true);
+  });
+
+  it('should be accessible on pdrng', () => {
+    expect(typeof pdrng.randomSeed).toBe('function');
+  });
+
+  it('should work as a seed for any function', () => {
+    const seed = randomSeed();
+    expect(() => {
+      coin({ seed });
+      dice(6, { seed });
+      range(1, 100, { seed });
+    }).not.toThrow();
+  });
+});
+
 // ─── Edge Cases ──────────────────────────────────────────────────────────────
 
 describe('edge cases', () => {
   it('should handle float seed by flooring', () => {
     expect(pdrng(3, { seed: 814.9 })).toBe(814);
+  });
+
+  it('should handle Math.random() as a seed', () => {
+    // 0.738193 → strips "0." → 738193, then fillDigits(738193, 3) → 193
+    const result = pdrng(3, { seed: 0.738193 });
+    expect(result).toBe(193);
+  });
+
+  it('should handle small floats as seeds', () => {
+    const result = pdrng(3, { seed: 0.5 });
+    expect(result).toBe(555);
   });
 
   it('should handle very large digit counts', () => {

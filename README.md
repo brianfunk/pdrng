@@ -216,6 +216,20 @@ Text seeds are converted using: `sum of charCode * (index + 1)`
 pdrng(4, { seed: 'brian' })  // 1579
 ```
 
+## Random Seeds
+
+While pdrng is deterministic by design, you can use random input to get non-deterministic behavior. Pass `Math.random()`, `crypto.getRandomValues()`, or use the built-in `randomSeed()` helper:
+
+```javascript
+import { coin, dice, randomSeed } from 'pdrng';
+
+// Built-in helper (uses crypto.getRandomValues for real entropy)
+coin({ seed: randomSeed() })      // different each call
+
+// Math.random() works directly as a seed
+dice(6, { seed: Math.random() })  // different each call
+```
+
 ## Imports
 
 ```javascript
