@@ -176,15 +176,6 @@ Deterministic bingo call.
 bingo()           // "B-14"
 ```
 
-#### `lottery(count?, max?, options?)`
-
-Deterministic number selection (sorted, unique).
-
-```javascript
-lottery()         // [sorted unique numbers]
-lottery(5, 90)    // 5 numbers, 1-90
-```
-
 #### `color(options?)`
 
 Deterministic hex color.

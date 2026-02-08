@@ -1,0 +1,50 @@
+{
+  "name": "pdrng",
+  "version": "1.0.0",
+  "description": "Pseudo Deterministic Random Number Generator - seed-based deterministic number generation",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint . --format stylish",
+    "lint:report": "eslint . --format html -o coverage/lint-report.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianfunk/pdrng.git"
+  },
+  "keywords": [
+    "random",
+    "rng",
+    "prng",
+    "deterministic",
+    "seed",
+    "dice",
+    "coin",
+    "uuid",
+    "pseudo",
+    "number",
+    "generator"
+  ],
+  "author": "Brian Funk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brianfunk/pdrng/issues"
+  },
+  "homepage": "https://github.com/brianfunk/pdrng#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "eslint": "^9.17.0",
+    "vitest": "^4.0.18"
+  }
+}
