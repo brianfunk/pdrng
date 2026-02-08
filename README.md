@@ -209,11 +209,11 @@ dice(6, { seed: 42 })     // 4
 card({ seed: 'brian' })   // deterministic card from text seed
 ```
 
-Text seeds are converted using: `sum of charCode * (index + 1)`
+Text seeds are converted using a rolling XOR hash, designed so that `"brian"` maps to seed 814:
 
 ```javascript
-// "brian" = 98*1 + 114*2 + 105*3 + 97*4 + 110*5 = 1579
-pdrng(4, { seed: 'brian' })  // 1579
+pdrng(3, { seed: 'brian' })  // 814 (same as default!)
+pdrng(4, { seed: 'brian' })  // 8148
 ```
 
 ## Random Seeds

@@ -472,6 +472,12 @@ describe('bingo()', () => {
     expect(result).toMatch(/^[BINGO]-\d+$/);
   });
 
+  it('should handle seeds ending in 00', () => {
+    const result = bingo({ seed: 100 });
+    expect(result).toMatch(/^[BINGO]-\d+$/);
+    expect(result).toBe('O-75');
+  });
+
   it('should be deterministic', () => {
     expect(bingo()).toBe(bingo());
   });
@@ -538,10 +544,9 @@ describe('method attachment', () => {
 
 describe('custom seeds', () => {
   it('should handle text seed "brian"', () => {
-    // "brian": b=98*1 + r=114*2 + i=105*3 + a=97*4 + n=110*5
-    // = 98 + 228 + 315 + 388 + 550 = 1579
-    const result = pdrng(4, { seed: 'brian' });
-    expect(result).toBe(1579);
+    // "brian" → rolling XOR hash → seed 814
+    expect(pdrng(3, { seed: 'brian' })).toBe(814);
+    expect(pdrng(4, { seed: 'brian' })).toBe(8148);
   });
 
   it('should produce different results for different seeds', () => {
