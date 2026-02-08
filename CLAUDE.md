@@ -41,6 +41,17 @@ Key derivations for seed 814:
 - digitSum: 13, digitProduct: 32
 - firstDigit: 8, lastDigit: 4, lastN(2): 14
 
+### Seed Priority Selection
+
+`dice()` and `range()` use priority-based selection. For any seed, build a priority list:
+1. Full seed (814)
+2. Last N-1 ... last 2 digits (14)
+3. First digit (8), last digit (4), then middle digits L→R (1)
+
+Pick the first priority value that falls within [min, max]. Fallback: `min + (seed % (max - min + 1))`.
+
+For seed 814: priority = [814, 14, 8, 4, 1]. So `dice(20)` → 14, `range(1, 100)` → 14, `dice(6)` → 4.
+
 ## Git Workflow
 
 - `dev` is the default branch — all work happens here

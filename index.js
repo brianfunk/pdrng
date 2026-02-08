@@ -147,6 +147,59 @@ const _fillDigits = (seed, count) => {
   return Number(result);
 };
 
+/**
+ * Build a priority list of values derived from the seed.
+ * Order: full seed, last N-1 digits ... last 2 digits, first digit, last digit, middle digits L→R.
+ *
+ * @param {number} seed
+ * @returns {number[]}
+ */
+const _seedPriority = (seed) => {
+  const seedStr = String(seed);
+  const n = seedStr.length;
+  const values = [seed];
+
+  // Last N-1 down to last 2 digits
+  for (let i = n - 1; i >= 2; i--) {
+    values.push(Number(seedStr.slice(-i)));
+  }
+
+  // First digit
+  values.push(Number(seedStr[0]));
+
+  // Last digit
+  if (n > 1) {
+    values.push(Number(seedStr[n - 1]));
+  }
+
+  // Remaining middle digits, left to right
+  for (let i = 1; i < n - 1; i++) {
+    values.push(Number(seedStr[i]));
+  }
+
+  return values;
+};
+
+/**
+ * Select a value from [min, max] using the seed priority algorithm.
+ * Returns the first priority value that falls within [min, max].
+ * Falls back to modulo-based selection if no priority value fits.
+ *
+ * @param {number} seed
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+const _selectFromRange = (seed, min, max) => {
+  const priorities = _seedPriority(seed);
+  for (const val of priorities) {
+    if (val >= min && val <= max) {
+      return val;
+    }
+  }
+  return min + (seed % (max - min + 1));
+};
+
 // ─── Data Constants ──────────────────────────────────────────────────────────
 
 const MAGIC_8_RESPONSES = Object.freeze([
@@ -252,11 +305,6 @@ const ZODIAC_SIGNS = Object.freeze([
   { name: 'Pisces', month: 2, startDay: 19 }
 ]);
 
-const MONTH_NAMES = Object.freeze([
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-]);
-
 // ─── Core Function ───────────────────────────────────────────────────────────
 
 /**
@@ -299,7 +347,7 @@ const float = (precision = 6, options = {}) => {
  */
 const range = (min, max, options = {}) => {
   const seed = _normalizeSeed(options.seed);
-  return min + (seed % (max - min + 1));
+  return _selectFromRange(seed, min, max);
 };
 
 /**
@@ -410,8 +458,7 @@ const coin = (options = {}) => {
  */
 const dice = (sides = 6, options = {}) => {
   const seed = _normalizeSeed(options.seed);
-  const result = _lastDigit(seed) % sides;
-  return result === 0 ? sides : result;
+  return _selectFromRange(seed, 1, sides);
 };
 
 /**
@@ -482,29 +529,12 @@ const magic8 = (options = {}) => {
  *
  * @param {Object} [options={}] - Options
  * @param {number|string} [options.seed] - Custom seed (default: 814)
- * @returns {Object} { sign, date }
+ * @returns {string} e.g. "Gemini"
  */
 const zodiac = (options = {}) => {
   const seed = _normalizeSeed(options.seed);
   const signIndex = _lastN(seed, 2) % 12;
-  const sign = ZODIAC_SIGNS[signIndex];
-  const dayOffset = _digitSum(seed) + 1;
-
-  // Calculate the date within the zodiac period
-  const month = sign.month;
-  const day = sign.startDay + dayOffset;
-
-  // Simple day overflow handling
-  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  let finalMonth = month;
-  let finalDay = day;
-  if (finalDay > daysInMonth[finalMonth - 1]) {
-    finalDay = finalDay - daysInMonth[finalMonth - 1];
-    finalMonth = (finalMonth % 12) + 1;
-  }
-
-  const monthName = MONTH_NAMES[finalMonth - 1];
-  return { sign: sign.name, date: `${monthName} ${finalDay}` };
+  return ZODIAC_SIGNS[signIndex].name;
 };
 
 /**
@@ -600,18 +630,9 @@ const bingo = (options = {}) => {
  */
 const color = (options = {}) => {
   const seed = _normalizeSeed(options.seed);
-  const seedStr = String(seed);
-
-  // Rotated seed fill: each full repetition shifts start by 1
-  let hex = '';
-  for (let i = 0; i < 6; i++) {
-    const rotation = Math.floor(i / seedStr.length);
-    hex += seedStr[(i + rotation) % seedStr.length];
-  }
-
-  // Convert digits to hex-valid characters
-  // Replace any character > 'f' equivalent — but our digits are 0-9 so they're already valid hex
-  return '#' + hex;
+  const prefix = (_firstDigit(seed) + 2).toString(16);
+  const fill = String(_fillDigits(seed, 5));
+  return '#' + prefix + fill;
 };
 
 // ─── Attach Methods ──────────────────────────────────────────────────────────

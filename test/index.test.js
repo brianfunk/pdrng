@@ -132,8 +132,8 @@ describe('float()', () => {
 // ─── Utility: range() ───────────────────────────────────────────────────────
 
 describe('range()', () => {
-  it('should return 15 for range(1, 100) with default seed', () => {
-    expect(range(1, 100)).toBe(15);
+  it('should return 14 for range(1, 100) with default seed', () => {
+    expect(range(1, 100)).toBe(14);
   });
 
   it('should return a value within bounds', () => {
@@ -262,9 +262,9 @@ describe('dice()', () => {
     expect(result).toBeLessThanOrEqual(20);
   });
 
-  it('should return sides when lastDigit % sides === 0', () => {
-    // seed 10: lastDigit=0, 0%6=0 → should return 6
-    expect(dice(6, { seed: 10 })).toBe(6);
+  it('should use seed priority selection', () => {
+    // seed 10: priority [10, 1, 0] → 1 is first in [1,6]
+    expect(dice(6, { seed: 10 })).toBe(1);
   });
 
   it('should be deterministic', () => {
@@ -358,20 +358,16 @@ describe('magic8()', () => {
 // ─── Game: zodiac() ─────────────────────────────────────────────────────────
 
 describe('zodiac()', () => {
-  it('should return Gemini, June 4 for default seed 814', () => {
-    const result = zodiac();
-    expect(result.sign).toBe('Gemini');
-    expect(result.date).toBe('June 4');
+  it('should return "Gemini" for default seed 814', () => {
+    expect(zodiac()).toBe('Gemini');
   });
 
-  it('should return an object with sign and date', () => {
-    const result = zodiac();
-    expect(result).toHaveProperty('sign');
-    expect(result).toHaveProperty('date');
+  it('should return a string', () => {
+    expect(typeof zodiac()).toBe('string');
   });
 
   it('should be deterministic', () => {
-    expect(zodiac()).toEqual(zodiac());
+    expect(zodiac()).toBe(zodiac());
   });
 });
 
@@ -483,8 +479,8 @@ describe('bingo()', () => {
 // ─── Game: color() ──────────────────────────────────────────────────────────
 
 describe('color()', () => {
-  it('should return "#814148" for default seed 814', () => {
-    expect(color()).toBe('#814148');
+  it('should return "#a81414" for default seed 814', () => {
+    expect(color()).toBe('#a81414');
   });
 
   it('should return a valid hex color format', () => {

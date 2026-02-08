@@ -1,10 +1,15 @@
+[![pdrng](https://img.shields.io/badge/pdrng-Deterministic%20RNG-b5d4ff.svg)](https://github.com/brianfunk/pdrng)
+[![npm version](https://img.shields.io/npm/v/pdrng.svg)](https://www.npmjs.com/package/pdrng)
+[![npm downloads](https://img.shields.io/npm/dm/pdrng.svg)](https://www.npmjs.com/package/pdrng)
+[![CI](https://github.com/brianfunk/pdrng/actions/workflows/ci.yml/badge.svg)](https://github.com/brianfunk/pdrng/actions/workflows/ci.yml)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)
+[![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
+[![LinkedIn](https://img.shields.io/badge/Linked-In-blue.svg)](https://www.linkedin.com/in/brianrandyfunk)
+
 # pdrng
 
 > Pseudo Deterministic Random Number Generator — seed-based deterministic number generation.
-
-[![CI](https://github.com/brianfunk/pdrng/actions/workflows/ci.yml/badge.svg)](https://github.com/brianfunk/pdrng/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/pdrng.svg)](https://www.npmjs.com/package/pdrng)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A JavaScript library for generating deterministic outputs based on a numeric seed. Given the same seed, every function produces the same result every time. Useful for testing, simulations, reproducible demos, and seeded content generation.
 
@@ -58,7 +63,7 @@ float(3)          // 0.814
 #### `range(min, max, options?)`
 
 ```javascript
-range(1, 100)     // 15
+range(1, 100)     // 14
 ```
 
 #### `array(count, digits?, options?)`
@@ -101,7 +106,7 @@ Deterministic die result.
 
 ```javascript
 dice()            // 4 (6-sided)
-dice(20)          // d20 result
+dice(20)          // 14
 ```
 
 #### `card(options?)`
@@ -130,10 +135,10 @@ magic8()          // "Reply hazy, try again."
 
 #### `zodiac(options?)`
 
-Deterministic zodiac sign and date.
+Deterministic zodiac sign.
 
 ```javascript
-zodiac()          // { sign: "Gemini", date: "June 4" }
+zodiac()          // "Gemini"
 ```
 
 #### `tarot(options?)`
@@ -181,7 +186,7 @@ bingo()           // "B-14"
 Deterministic hex color.
 
 ```javascript
-color()           // "#814148"
+color()           // "#a81414"
 ```
 
 #### `roulette(options?)`
@@ -200,7 +205,7 @@ Every function accepts an `options` object with a `seed` property:
 import { coin, dice, card } from 'pdrng';
 
 coin({ seed: 42 })        // "heads"
-dice(6, { seed: 42 })     // 2
+dice(6, { seed: 42 })     // 4
 card({ seed: 'brian' })   // deterministic card from text seed
 ```
 
