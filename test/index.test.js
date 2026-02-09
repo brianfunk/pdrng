@@ -152,6 +152,12 @@ describe('range()', () => {
     expect(result).toBeGreaterThanOrEqual(1);
     expect(result).toBeLessThanOrEqual(100);
   });
+
+  it('should use fallback when no priority value fits', () => {
+    // seed 814: priority [814, 14, 8, 4, 1] — none in [50, 100]
+    // fallback: 50 + (814 % 51) = 50 + 49 = 99
+    expect(range(50, 100)).toBe(99);
+  });
 });
 
 // ─── Utility: array() ───────────────────────────────────────────────────────
@@ -317,6 +323,14 @@ describe('roulette()', () => {
     expect(result.number).toBe(0);
     expect(result.color).toBe('green');
     expect(result.parity).toBe('zero');
+  });
+
+  it('should return black for a non-red, non-zero number', () => {
+    // seed 2: lastN(2,2)=2, 2%37=2, 2 is black
+    const result = roulette({ seed: 2 });
+    expect(result.number).toBe(2);
+    expect(result.color).toBe('black');
+    expect(result.parity).toBe('even');
   });
 
   it('should be deterministic', () => {
@@ -611,6 +625,20 @@ describe('edge cases', () => {
   it('should handle very large digit counts', () => {
     const result = pdrng(20);
     expect(String(result).length).toBe(20);
+  });
+
+  it('should handle NaN seed by using default', () => {
+    expect(pdrng(3, { seed: NaN })).toBe(814);
+  });
+
+  it('should handle Infinity seed by using default', () => {
+    expect(pdrng(3, { seed: Infinity })).toBe(814);
+    expect(pdrng(3, { seed: -Infinity })).toBe(814);
+  });
+
+  it('should handle object seed by using default', () => {
+    expect(pdrng(3, { seed: {} })).toBe(814);
+    expect(pdrng(3, { seed: [] })).toBe(814);
   });
 
   it('should produce consistent results across all functions with same seed', () => {

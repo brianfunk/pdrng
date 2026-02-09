@@ -90,6 +90,14 @@ oddOrEven()       // "even"
 redOrBlack()      // "red"
 ```
 
+#### `randomSeed()`
+
+Generate a random seed using `crypto.getRandomValues` (with `Math.random` fallback).
+
+```javascript
+randomSeed()      // e.g. 3847291056 (different each call)
+```
+
 ### Simulation Functions
 
 #### `coin(options?)`

@@ -26,16 +26,16 @@ npm run test:coverage  # Run tests with coverage report
 ## Architecture
 
 Single-file library (`index.js`) with:
-- Private helpers: `_textToSeed`, `_normalizeSeed`, `_digits`, `_digitSum`, `_digitProduct`, `_firstDigit`, `_lastDigit`, `_lastN`, `_fillDigits`
-- Frozen data constants: MAGIC_8_RESPONSES, MAJOR_ARCANA, FORTUNES, SUITS, RANKS, RPS_OPTIONS, COIN_SIDES, BINGO_LETTERS, RED_NUMBERS, ZODIAC_SIGNS, MONTH_NAMES
+- Private helpers: `_textToSeed`, `_normalizeSeed`, `_digits`, `_digitSum`, `_digitProduct`, `_firstDigit`, `_lastDigit`, `_lastN`, `_fillDigits`, `_seedPriority`, `_selectFromRange`
+- Frozen data constants: MAGIC_8_RESPONSES, MAJOR_ARCANA, FORTUNES, SUITS, RANKS, RPS_OPTIONS, COIN_SIDES, BINGO_LETTERS, RED_NUMBERS, ZODIAC_SIGNS
 - Core: `pdrng(digits, options)` — digit-fill algorithm
-- Utilities: `float`, `range`, `array`, `uuid`, `oddOrEven`, `redOrBlack`
+- Utilities: `float`, `range`, `array`, `uuid`, `oddOrEven`, `redOrBlack`, `randomSeed`
 - Simulation functions: `coin`, `dice`, `card`, `roulette`, `rps`, `magic8`, `zodiac`, `tarot`, `fortune`, `spin`, `roll`, `bingo`, `color`
 - All methods attached to `pdrng` object + named exports
 
 ## Seed Algorithm
 
-Default seed: 814. Text seeds: `sum of charCode * (index+1)`.
+Default seed: 814. Text seeds: rolling XOR hash (`init=3, shift=2`), designed so `"brian"` → 814.
 
 Key derivations for seed 814:
 - digitSum: 13, digitProduct: 32

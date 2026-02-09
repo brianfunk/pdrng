@@ -50,6 +50,7 @@ const _normalizeSeed = (seed) => {
   if (seed === undefined || seed === null) return DEFAULT_SEED;
   if (typeof seed === 'string') return _textToSeed(seed);
   const num = Number(seed);
+  if (!Number.isFinite(num)) return DEFAULT_SEED;
   const abs = Math.abs(num);
   // Handle floats between 0 and 1 (e.g. Math.random()) by scaling up
   if (abs > 0 && abs < 1) {
@@ -460,7 +461,7 @@ const randomSeed = () => {
   return Math.floor(Math.random() * 2147483647) || DEFAULT_SEED;
 };
 
-// ─── Game Functions ──────────────────────────────────────────────────────────
+// ─── Simulation Functions ────────────────────────────────────────────────────
 
 /**
  * Flip a deterministic coin.
