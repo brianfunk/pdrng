@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import pdrng, {
   float,
   range,
@@ -20,6 +20,7 @@ import pdrng, {
   bingo,
   color,
   randomSeed,
+  resolveSeed,
   DEFAULT_SEED
 } from '../index.js';
 
@@ -66,8 +67,21 @@ describe('pdrng()', () => {
     expect(pdrng(6)).toBe(814814);
   });
 
-  it('should return 0 for 0 digits', () => {
-    expect(pdrng(0)).toBe(0);
+  it('should throw a RangeError for 0 digits', () => {
+    expect(() => pdrng(0)).toThrow(RangeError);
+  });
+
+  it('should throw a RangeError for more than 15 digits', () => {
+    expect(() => pdrng(16)).toThrow(/digits must be an integer between 1 and 15/);
+  });
+
+  it('should throw a RangeError for non-integer digits', () => {
+    expect(() => pdrng(2.5)).toThrow(RangeError);
+    expect(() => pdrng('3')).toThrow(RangeError);
+  });
+
+  it('should return an exact 15-digit number', () => {
+    expect(pdrng(15)).toBe(814814814814814);
   });
 
   it('should accept a custom numeric seed', () => {
@@ -602,6 +616,50 @@ describe('randomSeed()', () => {
       range(1, 100, { seed });
     }).not.toThrow();
   });
+
+  describe('without Web Crypto', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it('should fall back to Math.random', () => {
+      vi.stubGlobal('crypto', undefined);
+      const seed = randomSeed();
+      expect(Number.isInteger(seed)).toBe(true);
+      expect(seed).toBeGreaterThan(0);
+    });
+
+    it('should fall back to the default seed when crypto yields 0', () => {
+      vi.stubGlobal('crypto', { getRandomValues: () => {} });
+      expect(randomSeed()).toBe(DEFAULT_SEED);
+    });
+
+    it('should fall back to the default seed when Math.random yields 0', () => {
+      vi.stubGlobal('crypto', undefined);
+      vi.spyOn(Math, 'random').mockReturnValue(0);
+      expect(randomSeed()).toBe(DEFAULT_SEED);
+      vi.restoreAllMocks();
+    });
+  });
+});
+
+// ─── Utility: resolveSeed() ─────────────────────────────────────────────────
+
+describe('resolveSeed()', () => {
+  it('should return 814 for the default and for "brian"', () => {
+    expect(resolveSeed()).toBe(814);
+    expect(resolveSeed('brian')).toBe(814);
+  });
+
+  it('should normalize numbers the same way every function does', () => {
+    expect(resolveSeed(-42.9)).toBe(42);
+    expect(resolveSeed(0.738193)).toBe(738193);
+    expect(resolveSeed(NaN)).toBe(814);
+  });
+
+  it('should be accessible on pdrng', () => {
+    expect(pdrng.resolveSeed('alice')).toBe(resolveSeed('alice'));
+  });
 });
 
 // ─── Edge Cases ──────────────────────────────────────────────────────────────
@@ -622,9 +680,18 @@ describe('edge cases', () => {
     expect(result).toBe(555);
   });
 
-  it('should handle very large digit counts', () => {
-    const result = pdrng(20);
-    expect(String(result).length).toBe(20);
+  it('should handle tiny floats that stringify with an exponent', () => {
+    // 1e-7 → decimal digits "0000001" → 1
+    expect(pdrng(3, { seed: 1e-7 })).toBe(111);
+    expect(pdrng(3, { seed: 1.23e-7 })).toBe(123);
+  });
+
+  it('should fall back to the default seed for floats with no digits in 15 places', () => {
+    expect(pdrng(3, { seed: 1e-20 })).toBe(814);
+  });
+
+  it('should reject digit counts that would lose precision', () => {
+    expect(() => pdrng(20)).toThrow(RangeError);
   });
 
   it('should handle NaN seed by using default', () => {
@@ -667,5 +734,43 @@ describe('edge cases', () => {
       bingo(opts);
       color(opts);
     }).not.toThrow();
+  });
+});
+
+// ─── Input Validation ────────────────────────────────────────────────────────
+
+describe('input validation', () => {
+  it('float() rejects precision outside 1-15', () => {
+    expect(() => float(0)).toThrow(RangeError);
+    expect(() => float(16)).toThrow(RangeError);
+    expect(float(15)).toBe(0.814814814814814);
+  });
+
+  it('range() rejects non-integers and min > max', () => {
+    expect(() => range(1.5, 10)).toThrow(RangeError);
+    expect(() => range(1, 10.5)).toThrow(RangeError);
+    expect(() => range(10, 1)).toThrow(/max must be an integer between 10 and/);
+    expect(range(5, 5)).toBe(5);
+    expect(range(-10, -1)).toBe(-10 + (814 % 10));
+  });
+
+  it('array() rejects bad count or digits', () => {
+    expect(() => array(-1)).toThrow(RangeError);
+    expect(() => array(10001)).toThrow(RangeError);
+    expect(() => array(3, 0)).toThrow(RangeError);
+    expect(array(0)).toEqual([]);
+  });
+
+  it('dice() rejects sides below 1 or non-integer', () => {
+    expect(() => dice(0)).toThrow(/sides must be an integer >= 1/);
+    expect(() => dice(-6)).toThrow(RangeError);
+    expect(() => dice(6.5)).toThrow(RangeError);
+    expect(dice(1)).toBe(1);
+  });
+
+  it('roll() rejects zero dice or zero sides', () => {
+    expect(() => roll('0d6')).toThrow(RangeError);
+    expect(() => roll('1d0')).toThrow(RangeError);
+    expect(() => roll('1001d6')).toThrow(RangeError);
   });
 });

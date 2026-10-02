@@ -1,0 +1,48 @@
+import { useMemo, useState } from 'react';
+import { Header } from './components/Header';
+import { Generator } from './components/Generator';
+import { ResultCard } from './components/ResultCard';
+import { ShareBar } from './components/ShareBar';
+import { JsonDrawer } from './components/JsonDrawer';
+import { Footer } from './components/Footer';
+import { useCopy, useSeedParam, useTheme } from './hooks';
+import { buildProfile } from './lib/profile';
+import { cardsFor } from './lib/cards';
+
+export default function App() {
+  const { dark, toggle } = useTheme();
+  const [seed, setSeed] = useSeedParam();
+  const [jsonOpen, setJsonOpen] = useState(false);
+  const { copied, copy } = useCopy();
+
+  const profile = useMemo(() => buildProfile(seed), [seed]);
+  const cards = useMemo(() => cardsFor(profile), [profile]);
+
+  const apiPath = seed.trim() === '' ? '/api/v1/profile' : `/api/v1/profile?seed=${encodeURIComponent(seed.trim())}`;
+
+  return (
+    <div className="flex min-h-dvh flex-col">
+      <Header dark={dark} onToggleTheme={toggle} />
+      <main className="flex-1">
+        <Generator seed={seed} profile={profile} onChange={setSeed} />
+        <ShareBar
+          apiUrl={apiPath}
+          jsonOpen={jsonOpen}
+          copiedLink={copied === 'link'}
+          onToggleJson={() => setJsonOpen((o) => !o)}
+          onCopyLink={() => copy('link', window.location.href)}
+        />
+        {jsonOpen && <JsonDrawer profile={profile} apiPath={apiPath} />}
+        <section
+          className="mx-auto mt-6 grid w-full max-w-5xl grid-cols-2 gap-2 px-4 sm:px-6 md:grid-cols-4 md:gap-3"
+          aria-label="Derived results"
+        >
+          {cards.map((spec) => (
+            <ResultCard key={spec.id} spec={spec} copied={copied === spec.id} onCopy={copy} />
+          ))}
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}

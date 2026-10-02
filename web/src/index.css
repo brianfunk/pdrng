@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius-*: initial;
+  --radius: 0px;
+}
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #666666;
+  --line: #111111;
+  --line-soft: #d4d4d4;
+  --panel: #f4f4f4;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --fg: #ededed;
+  --muted: #8a8a8a;
+  --line: #ededed;
+  --line-soft: #2a2a2a;
+  --panel: #141414;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-muted { color: var(--muted); }
+.border-line { border-color: var(--line); }
+.border-soft { border-color: var(--line-soft); }
+.bg-panel { background: var(--panel); }
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* Generator button: old-school bevelled push button */
+:root {
+  --btn-face: #e6e6e6;
+  --btn-light: #ffffff;
+  --btn-shadow: #808080;
+  --btn-dark: #000000;
+}
+:root.dark {
+  --btn-face: #2a2a2a;
+  --btn-light: #5a5a5a;
+  --btn-shadow: #0a0a0a;
+  --btn-dark: #000000;
+}
+.gen {
+  background: var(--btn-face);
+  color: var(--fg);
+  border: 2px solid;
+  border-color: var(--btn-light) var(--btn-dark) var(--btn-dark) var(--btn-light);
+  box-shadow: inset -2px -2px 0 var(--btn-shadow), inset 2px 2px 0 var(--btn-face);
+  cursor: pointer;
+}
+.gen:active, .gen[data-running='true'] {
+  border-color: var(--btn-dark) var(--btn-light) var(--btn-light) var(--btn-dark);
+  box-shadow: inset 2px 2px 0 var(--btn-shadow);
+  transform: translate(1px, 1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

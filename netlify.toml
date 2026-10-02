@@ -1,0 +1,38 @@
+# Netlify configuration for the pdrng site + API.
+# Link this repo in the Netlify dashboard (production branch: main); nothing else to set.
+
+[build]
+  base = "web"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Single-page app fallback. Function routes declared in netlify/functions/api.mts
+# (/api and /api/*) take precedence over this rewrite.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
