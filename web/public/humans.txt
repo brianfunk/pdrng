@@ -1,0 +1,15 @@
+/* TEAM */
+  Developer: Brian Funk
+  Site: https://github.com/brianfunk
+  LinkedIn: https://www.linkedin.com/in/brianrandyfunk
+
+/* THANKS */
+  Everyone whose name hashes to something interesting.
+
+/* SITE */
+  URL: https://pdrng.com
+  Last update: 2026/10/01
+  Standards: HTML5, CSS3, ES2022, OpenAPI 3.1
+  Components: React 19, Vite, Tailwind CSS 4, Netlify Functions
+  Software: pdrng (https://www.npmjs.com/package/pdrng)
+  Default seed: 814

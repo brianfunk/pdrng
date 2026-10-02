@@ -9,9 +9,28 @@
 
 # pdrng
 
-> Pseudo Deterministic Random Number Generator — seed-based deterministic number generation.
+> Pseudo Deterministic Random Number Generator. Same seed, same output.
 
-A JavaScript library for generating deterministic outputs based on a numeric seed. Given the same seed, every function produces the same result every time. Useful for testing, simulations, reproducible demos, and seeded content generation.
+A seed is any text or number. Text is hashed to a number (`brian` → 814, the default). From that number pdrng derives everything else: a playing card, a roulette pocket, a tarot card, a Magic 8-Ball answer, a zodiac sign, a hex color, a bingo call, dice results. The same seed always produces the same results.
+
+**Site:** [pdrng.com](https://pdrng.com) · **API docs:** [pdrng.com/api/docs](https://pdrng.com/api/docs) · **OpenAPI:** [pdrng.com/api/openapi.json](https://pdrng.com/api/openapi.json)
+
+```bash
+curl "https://pdrng.com/api/v1/profile?seed=brian"
+```
+
+```javascript
+import pdrng from 'pdrng';
+
+pdrng(3, { seed: 'brian' })  // 814
+pdrng.card()                 // "8 of Diamonds"
+pdrng.roulette()             // { number: 14, color: "red", parity: "even" }
+pdrng.tarot()                // "The Magician"
+pdrng.magic8()               // "Reply hazy, try again."
+pdrng.color()                // "#a81414"
+```
+
+pdrng is a deterministic engine for games of chance, not a cryptographic random number generator.
 
 **Default seed: 814**
 
@@ -40,7 +59,7 @@ pdrng.card()   // "8 of Diamonds"
 
 #### `pdrng(digits?, options?)`
 
-Generate a deterministic number with the specified number of digits.
+Generate a deterministic number with the specified number of digits (1-15). Throws `RangeError` otherwise.
 
 ```javascript
 pdrng()           // 814 (default: 3 digits)
@@ -88,6 +107,15 @@ oddOrEven()       // "even"
 
 ```javascript
 redOrBlack()      // "red"
+```
+
+#### `resolveSeed(seed?)`
+
+Returns the numeric seed that any input resolves to. Handy for showing what a text seed became.
+
+```javascript
+resolveSeed('brian')   // 814
+resolveSeed(-42.9)     // 42
 ```
 
 #### `randomSeed()`
@@ -250,10 +278,40 @@ import { coin, dice, card, roll } from 'pdrng';
 coin();
 ```
 
+## Validation
+
+Numeric arguments are validated and throw `RangeError` on bad input, never `NaN`:
+
+```javascript
+dice(0)         // RangeError: sides must be an integer >= 1, received 0
+range(10, 1)    // RangeError: max must be an integer between 10 and ...
+pdrng(20)       // RangeError: digits must be an integer between 1 and 15, received 20
+```
+
+## Frozen Outputs
+
+Outputs for a given seed are a contract. `test/snapshot.test.js` locks every function's result for seed 814, the text seed `"brian"`, and several others. Any change to those values is a breaking change and ships as a new major version.
+
+## Website and API
+
+The `web/` folder contains the React site and the Netlify Functions REST API. Every endpoint is `GET`, accepts `?seed=`, and returns JSON:
+
+```
+/api/v1/profile?seed=brian        everything at once
+/api/v1/dice?seed=brian&sides=20  14
+/api/v1/roll?seed=brian&notation=2d6+3
+/api/v1/spin?seed=brian&choices=pizza,tacos,sushi
+/api/openapi.json                 OpenAPI 3.1 spec
+/api/docs                         Swagger UI
+```
+
+Deterministic routes are cached immutably at the edge because the same input always gives the same output.
+
 ## Requirements
 
-- Node.js 18+
+- Node.js 20+
 - ESM only (`import`/`export`)
+- TypeScript definitions included
 
 ## License
 

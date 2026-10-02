@@ -12,7 +12,7 @@
  * All outputs are fully reproducible given the same seed (default: 814).
  *
  * @module pdrng
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  * @author Brian Funk
  */
@@ -52,10 +52,11 @@ const _normalizeSeed = (seed) => {
   const num = Number(seed);
   if (!Number.isFinite(num)) return DEFAULT_SEED;
   const abs = Math.abs(num);
-  // Handle floats between 0 and 1 (e.g. Math.random()) by scaling up
+  // Handle floats between 0 and 1 (e.g. Math.random()) by using their decimal digits.
+  // toFixed avoids exponent notation for tiny values such as 1e-7.
   if (abs > 0 && abs < 1) {
-    const str = String(abs).replace('0.', '');
-    return Number(str) || DEFAULT_SEED;
+    const digits = abs.toFixed(15).slice(2).replace(/0+$/, '');
+    return Number(digits) || DEFAULT_SEED;
   }
   const n = Math.floor(abs);
   return n === 0 ? DEFAULT_SEED : n;
@@ -113,7 +114,7 @@ const _lastN = (seed, n) => {
 
 /**
  * Digit-fill algorithm: produce a number with exactly `count` digits
- * derived deterministically from the seed.
+ * derived deterministically from the seed. Callers validate `count` >= 1.
  *
  * Rules:
  * - count < seed length: 1 digit → first digit, else last N digits
@@ -127,8 +128,6 @@ const _lastN = (seed, n) => {
 const _fillDigits = (seed, count) => {
   const seedStr = String(seed);
   const seedLen = seedStr.length;
-
-  if (count <= 0) return 0;
 
   if (count < seedLen) {
     if (count === 1) return _firstDigit(seed);
@@ -209,6 +208,26 @@ const _selectFromRange = (seed, min, max) => {
   }
   return min + (seed % (max - min + 1));
 };
+
+
+/**
+ * Assert that a value is an integer within [min, max]; throw a RangeError otherwise.
+ * @param {*} value
+ * @param {string} name
+ * @param {number} min
+ * @param {number} [max=Infinity]
+ * @returns {number}
+ */
+const _assertInt = (value, name, min, max = Infinity) => {
+  if (!Number.isInteger(value) || value < min || value > max) {
+    const bound = max === Infinity ? `>= ${min}` : `between ${min} and ${max}`;
+    throw new RangeError(`${name} must be an integer ${bound}, received ${String(value)}`);
+  }
+  return value;
+};
+
+/** Maximum digit count that stays exact within Number.MAX_SAFE_INTEGER. */
+const MAX_DIGITS = 15;
 
 // ─── Data Constants ──────────────────────────────────────────────────────────
 
@@ -320,12 +339,14 @@ const ZODIAC_SIGNS = Object.freeze([
 /**
  * Generate a deterministic "random" number with the specified number of digits.
  *
- * @param {number} [digits=3] - Number of digits in the result
+ * @param {number} [digits=3] - Number of digits in the result (1-15)
  * @param {Object} [options={}] - Options
  * @param {number|string} [options.seed] - Custom seed (default: 814)
  * @returns {number}
+ * @throws {RangeError} If digits is not an integer between 1 and 15
  */
 const pdrng = (digits = 3, options = {}) => {
+  _assertInt(digits, 'digits', 1, MAX_DIGITS);
   const seed = _normalizeSeed(options.seed);
   return _fillDigits(seed, digits);
 };
@@ -341,6 +362,7 @@ const pdrng = (digits = 3, options = {}) => {
  * @returns {number}
  */
 const float = (precision = 6, options = {}) => {
+  _assertInt(precision, 'precision', 1, MAX_DIGITS);
   const seed = _normalizeSeed(options.seed);
   const filled = _fillDigits(seed, precision);
   return Number('0.' + String(filled).padStart(precision, '0'));
@@ -356,6 +378,8 @@ const float = (precision = 6, options = {}) => {
  * @returns {number}
  */
 const range = (min, max, options = {}) => {
+  _assertInt(min, 'min', -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+  _assertInt(max, 'max', min, Number.MAX_SAFE_INTEGER);
   const seed = _normalizeSeed(options.seed);
   return _selectFromRange(seed, min, max);
 };
@@ -371,6 +395,8 @@ const range = (min, max, options = {}) => {
  * @returns {number[]}
  */
 const array = (count, digits = 3, options = {}) => {
+  _assertInt(count, 'count', 0, 10000);
+  _assertInt(digits, 'digits', 1, MAX_DIGITS);
   const seed = _normalizeSeed(options.seed);
   const result = [];
   for (let i = 0; i < count; i++) {
@@ -461,6 +487,15 @@ const randomSeed = () => {
   return Math.floor(Math.random() * 2147483647) || DEFAULT_SEED;
 };
 
+/**
+ * Resolve any accepted seed input to the numeric seed pdrng actually uses.
+ * Useful for showing users what their text seed became (e.g. "brian" → 814).
+ *
+ * @param {number|string} [seed] - Seed input (default: 814)
+ * @returns {number}
+ */
+const resolveSeed = (seed) => _normalizeSeed(seed);
+
 // ─── Simulation Functions ────────────────────────────────────────────────────
 
 /**
@@ -484,6 +519,7 @@ const coin = (options = {}) => {
  * @returns {number} 1 to sides
  */
 const dice = (sides = 6, options = {}) => {
+  _assertInt(sides, 'sides', 1);
   const seed = _normalizeSeed(options.seed);
   return _selectFromRange(seed, 1, sides);
 };
@@ -622,6 +658,8 @@ const roll = (notation, options = {}) => {
   const count = parseInt(match[1], 10);
   const sides = parseInt(match[2], 10);
   const modifier = match[3] ? parseInt(match[3], 10) : 0;
+  _assertInt(count, 'dice count', 1, 1000);
+  _assertInt(sides, 'sides', 1);
   const dp = _digitProduct(seed);
 
   const rolls = [];
@@ -684,6 +722,7 @@ pdrng.roll = roll;
 pdrng.bingo = bingo;
 pdrng.color = color;
 pdrng.randomSeed = randomSeed;
+pdrng.resolveSeed = resolveSeed;
 pdrng.DEFAULT_SEED = DEFAULT_SEED;
 
 // ─── Exports ─────────────────────────────────────────────────────────────────
@@ -712,5 +751,6 @@ export {
   bingo,
   color,
   randomSeed,
+  resolveSeed,
   DEFAULT_SEED
 };
