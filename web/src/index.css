@@ -52,13 +52,18 @@ body {
   border: 2px solid var(--line);
   background: var(--bg);
   color: var(--fg);
-  transition: background 120ms, color 120ms;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--line);
+  transition: background 120ms, color 120ms, box-shadow 120ms, transform 120ms;
+}
+.gen:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--line);
 }
 .gen:hover, .gen[data-running='true'] {
   background: var(--fg);
   color: var(--bg);
 }
-.gen:active { transform: translateY(1px); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

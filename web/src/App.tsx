@@ -18,8 +18,7 @@ export default function App() {
   const profile = useMemo(() => buildProfile(seed), [seed]);
   const cards = useMemo(() => cardsFor(profile), [profile]);
 
-  const seedParam = seed.trim() === '' ? 'brian' : seed.trim();
-  const apiPath = `/api/v1/profile?seed=${encodeURIComponent(seedParam)}`;
+  const apiPath = seed.trim() === '' ? '/api/v1/profile' : `/api/v1/profile?seed=${encodeURIComponent(seed.trim())}`;
 
   return (
     <div className="flex min-h-dvh flex-col">

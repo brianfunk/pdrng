@@ -24,7 +24,7 @@ export const useTheme = () => {
 
 const readSeedParam = (): string => {
   const value = new URLSearchParams(window.location.search).get('seed');
-  return value ?? 'brian';
+  return value ?? '';
 };
 
 /** The seed text, mirrored to `?seed=` so every result has a shareable URL. */
@@ -40,7 +40,7 @@ export const useSeedParam = () => {
   const setSeed = useCallback((next: string) => {
     setSeedState(next);
     const url = new URL(window.location.href);
-    if (next.trim() === '' || next === 'brian') url.searchParams.delete('seed');
+    if (next.trim() === '') url.searchParams.delete('seed');
     else url.searchParams.set('seed', next);
     window.history.replaceState(null, '', url);
   }, []);

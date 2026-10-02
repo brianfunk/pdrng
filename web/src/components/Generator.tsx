@@ -61,9 +61,14 @@ export const Generator = ({ seed, profile, onChange }: Props) => {
         type="button"
         onClick={run}
         data-running={running}
-        className="gen focus-ring block w-full px-4 py-6 text-center text-sm font-bold uppercase tracking-[0.18em] sm:py-8 sm:text-base"
+        className="gen focus-ring block w-full cursor-pointer select-none px-4 py-6 text-center text-sm font-bold uppercase tracking-[0.18em] sm:py-8 sm:text-base"
+        aria-label="Generate number"
+        title="Click to generate"
       >
-        Pseudo Deterministic Random Number Generator
+        <span className="block">Pseudo Deterministic Random Number Generator</span>
+        <span className="mt-2 block text-[10px] font-normal normal-case tracking-[0.2em] opacity-70">
+          [ click to generate ]
+        </span>
       </button>
 
       <output
@@ -103,7 +108,7 @@ export const Generator = ({ seed, profile, onChange }: Props) => {
             name="seed"
             value={seed}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="brian"
+            placeholder="enter a seed (any text or number)"
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
@@ -115,7 +120,7 @@ export const Generator = ({ seed, profile, onChange }: Props) => {
         </div>
         <p className="mt-2 text-xs text-muted">
           {profile.input === null
-            ? 'empty seed resolves to the default, 814'
+            ? 'no seed entered → default seed 814'
             : typeof profile.input === 'number'
               ? `numeric input: |floor(${profile.input})| = ${target}`
               : `text input hashed to ${target}`}
