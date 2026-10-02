@@ -110,6 +110,15 @@ oddOrEven()       // "even"
 redOrBlack()      // "red"
 ```
 
+#### `resolveSeed(seed?)`
+
+Returns the numeric seed that any input resolves to. Handy for showing what a text seed became.
+
+```javascript
+resolveSeed('brian')   // 814
+resolveSeed(-42.9)     // 42
+```
+
 #### `randomSeed()`
 
 Generate a random seed using `crypto.getRandomValues` (with `Math.random` fallback).

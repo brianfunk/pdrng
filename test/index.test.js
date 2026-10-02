@@ -20,6 +20,7 @@ import pdrng, {
   bingo,
   color,
   randomSeed,
+  resolveSeed,
   DEFAULT_SEED
 } from '../index.js';
 
@@ -639,6 +640,25 @@ describe('randomSeed()', () => {
       expect(randomSeed()).toBe(DEFAULT_SEED);
       vi.restoreAllMocks();
     });
+  });
+});
+
+// ─── Utility: resolveSeed() ─────────────────────────────────────────────────
+
+describe('resolveSeed()', () => {
+  it('should return 814 for the default and for "brian"', () => {
+    expect(resolveSeed()).toBe(814);
+    expect(resolveSeed('brian')).toBe(814);
+  });
+
+  it('should normalize numbers the same way every function does', () => {
+    expect(resolveSeed(-42.9)).toBe(42);
+    expect(resolveSeed(0.738193)).toBe(738193);
+    expect(resolveSeed(NaN)).toBe(814);
+  });
+
+  it('should be accessible on pdrng', () => {
+    expect(pdrng.resolveSeed('alice')).toBe(resolveSeed('alice'));
   });
 });
 

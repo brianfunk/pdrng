@@ -65,6 +65,9 @@ export function oddOrEven(options?: Options): Parity;
 /** "red" or "black" based on the seed's digit sum. */
 export function redOrBlack(options?: Options): RedOrBlack;
 
+/** Resolve any seed input to the numeric seed pdrng uses, e.g. "brian" → 814. */
+export function resolveSeed(seed?: number | string): number;
+
 /** A fresh non-deterministic seed from the Web Crypto API (Math.random fallback). */
 export function randomSeed(): number;
 
@@ -129,6 +132,7 @@ export interface Pdrng {
   bingo: typeof bingo;
   color: typeof color;
   randomSeed: typeof randomSeed;
+  resolveSeed: typeof resolveSeed;
   DEFAULT_SEED: typeof DEFAULT_SEED;
 }
 

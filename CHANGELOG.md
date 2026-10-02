@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Website + REST API** - interactive site and JSON API deployed on Netlify (see `web/`), with OpenAPI 3.1 spec and Swagger UI at `/api/docs`
+- **`resolveSeed(seed)`** - returns the numeric seed any input resolves to (`"brian"` → 814)
 - **TypeScript definitions** - `index.d.ts` with typed options and result shapes
 - **Frozen-output snapshot tests** - every public function's result for seed 814, `"brian"` and several other seeds is locked; any drift fails CI
 - **Input validation** - `pdrng`, `float`, `range`, `array`, `dice` and `roll` throw `RangeError` on invalid arguments instead of returning `NaN` or imprecise numbers

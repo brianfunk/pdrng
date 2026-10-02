@@ -487,6 +487,15 @@ const randomSeed = () => {
   return Math.floor(Math.random() * 2147483647) || DEFAULT_SEED;
 };
 
+/**
+ * Resolve any accepted seed input to the numeric seed pdrng actually uses.
+ * Useful for showing users what their text seed became (e.g. "brian" → 814).
+ *
+ * @param {number|string} [seed] - Seed input (default: 814)
+ * @returns {number}
+ */
+const resolveSeed = (seed) => _normalizeSeed(seed);
+
 // ─── Simulation Functions ────────────────────────────────────────────────────
 
 /**
@@ -713,6 +722,7 @@ pdrng.roll = roll;
 pdrng.bingo = bingo;
 pdrng.color = color;
 pdrng.randomSeed = randomSeed;
+pdrng.resolveSeed = resolveSeed;
 pdrng.DEFAULT_SEED = DEFAULT_SEED;
 
 // ─── Exports ─────────────────────────────────────────────────────────────────
@@ -741,5 +751,6 @@ export {
   bingo,
   color,
   randomSeed,
+  resolveSeed,
   DEFAULT_SEED
 };
