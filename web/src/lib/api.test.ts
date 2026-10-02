@@ -147,3 +147,13 @@ describe('OpenAPI document', () => {
     expect(spec.paths['/api/v1/odd-or-even'].get.operationId).toBe('oddOrEven');
   });
 });
+
+describe('versioning', () => {
+  it('keeps the OpenAPI version in sync with the published package version', async () => {
+    const { readFile } = await import('node:fs/promises');
+    const root = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf8'));
+    const web = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+    expect(buildOpenApi('https://x').info.version).toBe(root.version);
+    expect(web.version).toBe(root.version);
+  });
+});
