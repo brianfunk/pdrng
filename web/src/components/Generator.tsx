@@ -57,19 +57,18 @@ export const Generator = ({ seed, profile, onChange }: Props) => {
 
   return (
     <section className="mx-auto w-full max-w-5xl px-4 pt-10 sm:px-6 sm:pt-16" aria-label="Generator">
-      <button
-        type="button"
-        onClick={run}
-        data-running={running}
-        className="gen focus-ring block w-full cursor-pointer select-none px-4 py-6 text-center text-sm font-bold uppercase tracking-[0.18em] sm:py-8 sm:text-base"
-        aria-label="Generate number"
-        title="Click to generate"
-      >
-        <span className="block">Pseudo Deterministic Random Number Generator</span>
-        <span className="mt-2 block text-[10px] font-normal normal-case tracking-[0.2em] opacity-70">
-          [ click to generate ]
-        </span>
-      </button>
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={run}
+          data-running={running}
+          className="gen focus-ring inline-block cursor-pointer select-none px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] sm:px-8 sm:text-sm"
+          aria-label="Generate number"
+        >
+          Pseudo Deterministic Random Number Generator
+        </button>
+        <p className="mt-3 text-[11px] tracking-[0.18em] text-muted">[ click to generate ]</p>
+      </div>
 
       <output
         className="mt-10 block text-center font-mono text-7xl font-bold tabular-nums leading-none sm:text-9xl"

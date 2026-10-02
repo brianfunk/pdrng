@@ -47,22 +47,31 @@ body {
   outline-offset: 2px;
 }
 
-/* Generator button */
+/* Generator button: old-school bevelled push button */
+:root {
+  --btn-face: #e6e6e6;
+  --btn-light: #ffffff;
+  --btn-shadow: #808080;
+  --btn-dark: #000000;
+}
+:root.dark {
+  --btn-face: #2a2a2a;
+  --btn-light: #5a5a5a;
+  --btn-shadow: #0a0a0a;
+  --btn-dark: #000000;
+}
 .gen {
-  border: 2px solid var(--line);
-  background: var(--bg);
+  background: var(--btn-face);
   color: var(--fg);
+  border: 2px solid;
+  border-color: var(--btn-light) var(--btn-dark) var(--btn-dark) var(--btn-light);
+  box-shadow: inset -2px -2px 0 var(--btn-shadow), inset 2px 2px 0 var(--btn-face);
   cursor: pointer;
-  box-shadow: 4px 4px 0 var(--line);
-  transition: background 120ms, color 120ms, box-shadow 120ms, transform 120ms;
 }
-.gen:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--line);
-}
-.gen:hover, .gen[data-running='true'] {
-  background: var(--fg);
-  color: var(--bg);
+.gen:active, .gen[data-running='true'] {
+  border-color: var(--btn-dark) var(--btn-light) var(--btn-light) var(--btn-dark);
+  box-shadow: inset 2px 2px 0 var(--btn-shadow);
+  transform: translate(1px, 1px);
 }
 
 @media (prefers-reduced-motion: reduce) {
