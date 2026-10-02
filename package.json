@@ -1,14 +1,23 @@
 {
   "name": "pdrng",
-  "version": "1.0.0",
-  "description": "Pseudo Deterministic Random Number Generator - seed-based deterministic number generation",
+  "version": "1.1.0",
+  "description": "Your seed, your number, your fate. Deterministic coin flips, dice, cards, roulette, tarot, fortunes and more from a single seed.",
   "type": "module",
   "main": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.js"
     }
   },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -21,17 +30,25 @@
     "url": "git+https://github.com/brianfunk/pdrng.git"
   },
   "keywords": [
+    "bingo",
+    "cards",
+    "coin",
+    "deterministic",
+    "dice",
+    "fortune",
+    "games",
+    "generator",
+    "magic8",
+    "number",
+    "prng",
+    "pseudo",
     "random",
     "rng",
-    "prng",
-    "deterministic",
+    "roulette",
     "seed",
-    "dice",
-    "coin",
+    "tarot",
     "uuid",
-    "pseudo",
-    "number",
-    "generator"
+    "zodiac"
   ],
   "author": "Brian Funk",
   "license": "MIT",
@@ -40,7 +57,7 @@
   },
   "homepage": "https://github.com/brianfunk/pdrng#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
