@@ -87,11 +87,11 @@ describe('API router', () => {
     expect(await body('/api/v1/dice?seed=814&sides=20')).toEqual({ seed: 814, sides: 20, value: 14 });
     expect(await body('/api/v1/range?seed=brian&min=1&max=100')).toEqual({ seed: 814, min: 1, max: 100, value: 14 });
     expect(await body('/api/v1/seed?seed=brian')).toEqual({ input: 'brian', seed: 814 });
-    expect(await body('/api/v1/spin?seed=brian&choices=a,%20b,c,d')).toEqual({ seed: 814, choices: ['a', 'b', 'c', 'd'], value: 'c' });
+    expect(await body('/api/v1/spin?seed=brian&choices=a,%20b,c,d')).toEqual({ seed: 814, choices: ['a', 'b', 'c', 'd'], value: 'd' });
     expect(await body('/api/v1/roll?seed=brian&notation=2d6%2B3')).toEqual({
-      seed: 814, notation: '2d6+3', value: { rolls: [5, 1], modifier: 3, total: 9 },
+      seed: 814, notation: '2d6+3', value: { rolls: [5, 2], modifier: 3, total: 10 },
     });
-    expect(await body('/api/v1/array?count=3&digits=2')).toEqual({ seed: 814, count: 3, digits: 2, values: [14, 46, 78] });
+    expect(await body('/api/v1/array?count=3&digits=2')).toEqual({ seed: 814, count: 3, digits: 2, values: [14, 41, 68] });
     expect(await body('/api/v1/number?digits=6')).toEqual({ seed: 814, digits: 6, value: 814814 });
     expect(await body('/api/v1/float?precision=3')).toEqual({ seed: 814, precision: 3, value: 0.814 });
   });

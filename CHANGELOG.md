@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-10-02
+
+### Fixed
+
+- **`rps()` chose rock about 90% of the time.** It used the digit product mod 3, and the digit product is divisible by 3 whenever any digit is 0, 3, 6 or 9. Now `(seed + digitSum) mod 3`. Seed 814 still gives scissors.
+- **`roll()` and `array()` produced identical dice and elements for a third of seeds** (any seed containing a 0 digit has a digit product of 0). Sub-seeds now step by `2 × digitSum + 1`, which is always odd and nonzero. Seed 814: `roll('2d6+3')` is now `[5, 2]` total 10 (was `[5, 1]` total 9); `array(3, 2)` is now `[14, 41, 68]` (was `[14, 46, 78]`).
+- **`spin()` could never reach odd positions of even-length lists for text seeds**, because text seeds always hash to an even number. Index is now `(seed + digitSum) mod length`. Seed 814 with `['a','b','c','d']` is now `"d"` (was `"c"`).
+- **Magic 8-Ball had "Reply hazy, try again." twice** and was missing "Concentrate and ask again." Replaced the first duplicate (index 10), so seed 814's answer is unchanged.
+
+These change frozen outputs. Shipped as a patch rather than a major because 1.1.0 was published hours earlier with no dependents and the previous behaviour was a defect, not a design. The snapshot test was updated deliberately and only for the keys listed above.
+
 ## [1.1.0] - 2026-10-01
 
 ### Added

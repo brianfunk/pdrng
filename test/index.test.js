@@ -438,8 +438,8 @@ describe('spin()', () => {
   it('should pick deterministically from an array', () => {
     const choices = ['apple', 'banana', 'cherry', 'date'];
     const result = spin(choices);
-    // 814 % 4 = 2 → "cherry"
-    expect(result).toBe('cherry');
+    // (814 + digit sum 13) % 4 = 3 → "date"
+    expect(result).toBe('date');
   });
 
   it('should throw for empty array', () => {
@@ -459,11 +459,11 @@ describe('spin()', () => {
 // ─── Game: roll() ───────────────────────────────────────────────────────────
 
 describe('roll()', () => {
-  it('should return { rolls: [5, 1], modifier: 3, total: 9 } for "2d6+3"', () => {
+  it('should return { rolls: [5, 2], modifier: 3, total: 10 } for "2d6+3"', () => {
     const result = roll('2d6+3');
-    expect(result.rolls).toEqual([5, 1]);
+    expect(result.rolls).toEqual([5, 2]);
     expect(result.modifier).toBe(3);
-    expect(result.total).toBe(9);
+    expect(result.total).toBe(10);
   });
 
   it('should handle notation without modifier', () => {
@@ -734,6 +734,42 @@ describe('edge cases', () => {
       bingo(opts);
       color(opts);
     }).not.toThrow();
+  });
+});
+
+// ─── Distribution ────────────────────────────────────────────────────────────
+
+describe('distribution sanity', () => {
+  const seeds = Array.from({ length: 3000 }, (_, i) => i + 1);
+  const share = (fn) => {
+    const tally = {};
+    for (const seed of seeds) {
+      const v = String(fn({ seed }));
+      tally[v] = (tally[v] || 0) + 1;
+    }
+    return Math.max(...Object.values(tally)) / seeds.length;
+  };
+
+  it('rps() is not dominated by one option', () => {
+    expect(share(rps)).toBeLessThan(0.4);
+  });
+
+  it('spin() reaches every position of an even-length list for text seeds', () => {
+    const words = ['brian', 'alice', 'bob', 'carol', 'dave', 'eve', 'frank', 'grace', 'heidi', 'ivan', 'judy', 'oscar'];
+    const seen = new Set(words.map((w) => spin(['a', 'b', 'c', 'd'], { seed: w })));
+    expect(seen.size).toBe(4);
+  });
+
+  it('roll() and array() do not collapse to identical values for seeds containing 0', () => {
+    for (const seed of [100, 2024, 1000000, 'bob', 'hello']) {
+      expect(new Set(roll('3d6', { seed }).rolls).size).toBeGreaterThan(1);
+      expect(new Set(array(4, 3, { seed })).size).toBeGreaterThan(1);
+    }
+  });
+
+  it('magic8() has twenty distinct answers', () => {
+    const answers = new Set(seeds.map((seed) => magic8({ seed })));
+    expect(answers.size).toBe(20);
   });
 });
 
