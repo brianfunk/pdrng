@@ -118,13 +118,13 @@ export const Generator = ({ seed, profile, onChange }: Props) => {
             → {target}
           </span>
         </div>
-        <p className="mt-2 text-xs text-muted">
-          {profile.input === null
-            ? 'no seed entered → default seed 814'
-            : typeof profile.input === 'number'
+        {profile.input !== null && (
+          <p className="mt-2 text-xs text-muted">
+            {typeof profile.input === 'number'
               ? `numeric input: |floor(${profile.input})| = ${target}`
               : `text input hashed to ${target}`}
-        </p>
+          </p>
+        )}
       </form>
     </section>
   );
