@@ -1,15 +1,22 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change.
+Issues and pull requests are welcome. For anything beyond a small fix, open an issue first so
+the change can be discussed.
 
-## Pull Request Process
+## Ground rules
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a
-   build.
-2. Update the README.md with details of changes to the interface, this includes new environment
-   variables, exposed ports, useful file locations and container parameters.
-3. Increase the version numbers in any examples files and the README.md to the new version that this
-   Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you
-   do not have permission to do that, you may request the second reviewer to merge it for you.
+- **Outputs are frozen.** `test/snapshot.test.js` locks every result for the default seed and
+  several others. A change to any existing output is a breaking change and needs a major
+  version bump, an updated snapshot and a CHANGELOG entry explaining why.
+- **Everything is a pure function of the seed** except `randomSeed()`.
+- Keep 100% test coverage on `index.js` and a clean lint. CI checks both.
+- Update `CHANGELOG.md` for user-facing changes and `index.d.ts` for API changes.
+
+## Workflow
+
+1. Branch from `dev`.
+2. `npm install && npm test && npm run lint` at the root; `cd web && npm install && npm test && npm run build` for the site and API.
+3. Open a pull request against `dev`. CI must pass before it can merge.
+4. `main` is production and only receives pull requests from `dev`.
+
+See `AGENTS.md` for a fuller description of the repository's conventions.

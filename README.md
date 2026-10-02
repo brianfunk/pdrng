@@ -9,12 +9,11 @@
 
 # pdrng
 
-> **Your seed, your number, your fate.**
-> Pseudo Deterministic Random Number Generator: coin flips, dice, cards, roulette, tarot, fortunes and more, all derived from a single seed.
+> Pseudo Deterministic Random Number Generator. Same seed, same output.
 
-Type a word, get a number. Type `brian`, get **814**. From that one number pdrng derives everything else: your lucky card, your roulette spin, your tarot draw, your Magic 8-Ball answer, your zodiac sign, your color, your bingo call. Same seed in, same fate out, every single time.
+A seed is any text or number. Text is hashed to a number (`brian` → 814, the default). From that number pdrng derives everything else: a playing card, a roulette pocket, a tarot card, a Magic 8-Ball answer, a zodiac sign, a hex color, a bingo call, dice results. The same seed always produces the same results.
 
-**Try it live:** [pdrng.netlify.app](https://pdrng.netlify.app) · **API docs:** [pdrng.netlify.app/api/docs](https://pdrng.netlify.app/api/docs)
+**Site:** [pdrng.netlify.app](https://pdrng.netlify.app) · **API docs:** [pdrng.netlify.app/api/docs](https://pdrng.netlify.app/api/docs)
 
 ```bash
 curl "https://pdrng.netlify.app/api/v1/profile?seed=brian"
@@ -24,14 +23,14 @@ curl "https://pdrng.netlify.app/api/v1/profile?seed=brian"
 import pdrng from 'pdrng';
 
 pdrng(3, { seed: 'brian' })  // 814
-pdrng.card()              // "8 of Diamonds"
-pdrng.roulette()          // { number: 14, color: "red", parity: "even" }
-pdrng.tarot()             // "The Magician"
-pdrng.magic8()            // "Reply hazy, try again."
-pdrng.color()             // "#a81414"
+pdrng.card()                 // "8 of Diamonds"
+pdrng.roulette()             // { number: 14, color: "red", parity: "even" }
+pdrng.tarot()                // "The Magician"
+pdrng.magic8()               // "Reply hazy, try again."
+pdrng.color()                // "#a81414"
 ```
 
-Not a cryptographic RNG and not meant to be. It is a deterministic engine for games of chance: fixtures, demos, seeded content, and finding out what the universe has in store for your name.
+pdrng is a deterministic engine for games of chance, not a cryptographic random number generator.
 
 **Default seed: 814**
 

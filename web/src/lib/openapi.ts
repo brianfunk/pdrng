@@ -19,9 +19,9 @@ export const buildOpenApi = (origin: string) => ({
   info: {
     title: 'pdrng API',
     version: '1.1.0',
-    summary: 'Your seed, your number, your fate.',
+    summary: 'Pseudo Deterministic Random Number Generator. Same seed, same output.',
     description:
-      'A deterministic engine for games of chance. Every route takes a `seed` and returns the same answer for that seed, forever. ' +
+      'Every route takes a `seed` and returns the same answer for that seed, forever. ' +
       'Pass any word or number: "brian" resolves to 814, the default. Deterministic responses are cached immutably at the edge.',
     license: { name: 'MIT', url: 'https://github.com/brianfunk/pdrng/blob/main/LICENSE' },
     contact: { name: 'Brian Funk', url: 'https://github.com/brianfunk/pdrng' },

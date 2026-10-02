@@ -21,7 +21,6 @@ Thumbs.db
 # Dev files
 vitest.config.js
 eslint.config.js
-CLAUDE.md
 AGENTS.md
 CHANGELOG.md
 

@@ -1,7 +1,7 @@
 {
   "name": "pdrng",
   "version": "1.1.0",
-  "description": "Your seed, your number, your fate. Deterministic coin flips, dice, cards, roulette, tarot, fortunes and more from a single seed.",
+  "description": "Pseudo Deterministic Random Number Generator. Coin flips, dice, cards, roulette, tarot, fortunes and more, all derived from a seed. Same seed, same output.",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",

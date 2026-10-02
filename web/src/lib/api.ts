@@ -36,7 +36,6 @@ export const handle = (request: Request): Response => {
     return json(
       {
         name: 'pdrng',
-        tagline: 'Your seed, your number, your fate.',
         docs: `${url.origin}/api/docs`,
         openapi: `${url.origin}/api/openapi.json`,
         routes: ROUTES.map((r) => ({ path: `/api/v1/${r.name}`, summary: r.summary })),
