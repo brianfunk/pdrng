@@ -1,7 +1,4 @@
-import { Braces, Check, Link2, Terminal } from 'lucide-react';
-
 interface Props {
-  shareUrl: string;
   apiUrl: string;
   jsonOpen: boolean;
   copiedLink: boolean;
@@ -9,21 +6,18 @@ interface Props {
   onCopyLink: () => void;
 }
 
-const btn =
-  'focus-ring inline-flex items-center gap-2 rounded-full border border-[var(--card-border)] bg-[var(--card)] px-4 py-2 text-sm font-medium transition hover:-translate-y-px hover:shadow-sm';
+const btn = 'focus-ring border border-soft px-3 py-1.5 text-xs uppercase tracking-[0.14em] hover:border-line';
 
-export const ShareBar = ({ shareUrl, apiUrl, jsonOpen, copiedLink, onToggleJson, onCopyLink }: Props) => (
-  <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-2 px-4 sm:px-6">
+export const ShareBar = ({ apiUrl, jsonOpen, copiedLink, onToggleJson, onCopyLink }: Props) => (
+  <div className="mx-auto mt-10 flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 sm:px-6">
     <button type="button" onClick={onCopyLink} className={btn} aria-live="polite">
-      {copiedLink ? <Check className="size-4 text-emerald-600" aria-hidden /> : <Link2 className="size-4" aria-hidden />}
-      {copiedLink ? 'Link copied' : 'Copy share link'}
+      {copiedLink ? 'link copied' : 'copy link'}
     </button>
     <button type="button" onClick={onToggleJson} className={btn} aria-expanded={jsonOpen}>
-      <Braces className="size-4" aria-hidden /> {jsonOpen ? 'Hide JSON' : 'View JSON'}
+      {jsonOpen ? 'hide json' : 'json'}
     </button>
     <a href={apiUrl} className={btn} target="_blank" rel="noreferrer">
-      <Terminal className="size-4" aria-hidden /> Open in API
+      api
     </a>
-    <span className="sr-only">{shareUrl}</span>
   </div>
 );

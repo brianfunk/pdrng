@@ -10,16 +10,14 @@ export const docsHtml = `<!doctype html>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css" />
   <style>
     :root { color-scheme: light; }
-    body { margin: 0; background: #f7f6f3; }
+    body { margin: 0; background: #ffffff; }
     .topbar { display: none; }
-    .swagger-ui .info .title { font-family: Inter, system-ui, sans-serif; }
-    .pdrng-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1.25rem; background: #0b0d12; color: #f7f6f3; font: 500 14px/1 Inter, system-ui, sans-serif; }
-    .pdrng-bar a { color: #f5c451; text-decoration: none; }
-    .pdrng-bar a:hover { text-decoration: underline; }
+    .pdrng-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1.25rem; background: #111111; color: #ffffff; font: 500 13px/1 'JetBrains Mono', ui-monospace, Menlo, monospace; }
+    .pdrng-bar a { color: #ffffff; text-decoration: underline; text-underline-offset: 3px; }
   </style>
 </head>
 <body>
-  <div class="pdrng-bar"><span>pdrng API &middot; your seed, your number, your fate</span><a href="/">&larr; back to the site</a></div>
+  <div class="pdrng-bar"><span>pdrng api</span><a href="/">&larr; site</a></div>
   <div id="swagger-ui"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-bundle.min.js" crossorigin></script>
   <script>
