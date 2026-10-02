@@ -145,7 +145,7 @@ export const ROUTES: Route[] = [
   {
     name: 'array',
     summary: 'Array of numbers',
-    description: '`count` numbers with `digits` digits each. Each element uses a sub-seed of seed + index × digit product.',
+    description: '`count` numbers with `digits` digits each. Each element uses the sub-seed seed + index × (2 × digitSum + 1).',
     params: [
       SEED_PARAM,
       { name: 'count', description: 'Element count, 0-10000', type: 'integer', default: 5 },
@@ -228,7 +228,7 @@ export const ROUTES: Route[] = [
   {
     name: 'rps',
     summary: 'Rock, paper, scissors',
-    description: 'Chosen from the digit product modulo 3.',
+    description: 'Chosen from (seed + digitSum) modulo 3.',
     params: [SEED_PARAM],
     response: withSeed({ value: { type: 'string', enum: ['rock', 'paper', 'scissors'] } }),
     handler: seeded((o) => ({ value: p.rps(o) })),

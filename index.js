@@ -12,7 +12,7 @@
  * All outputs are fully reproducible given the same seed (default: 814).
  *
  * @module pdrng
- * @version 1.1.0
+ * @version 1.1.1
  * @license MIT
  * @author Brian Funk
  */
@@ -229,6 +229,15 @@ const _assertInt = (value, name, min, max = Infinity) => {
 /** Maximum digit count that stays exact within Number.MAX_SAFE_INTEGER. */
 const MAX_DIGITS = 15;
 
+/**
+ * Step used to derive sub-seeds (array elements, individual dice).
+ * Always odd and at least 3, so consecutive sub-seeds never collapse onto
+ * the same value the way a zero or even digit product did.
+ * @param {number} seed
+ * @returns {number}
+ */
+const _subSeedStep = (seed) => 2 * _digitSum(seed) + 1;
+
 // ─── Data Constants ──────────────────────────────────────────────────────────
 
 const MAGIC_8_RESPONSES = Object.freeze([
@@ -242,7 +251,7 @@ const MAGIC_8_RESPONSES = Object.freeze([
   'Outlook good.',
   'Yes.',
   'Signs point to yes.',
-  'Reply hazy, try again.',
+  'Concentrate and ask again.',
   'Ask again later.',
   'Better not tell you now.',
   'Cannot predict now.',
@@ -386,7 +395,7 @@ const range = (min, max, options = {}) => {
 
 /**
  * Generate an array of deterministic numbers.
- * Each element uses a sub-seed derived from the main seed + index.
+ * Each element uses the sub-seed `seed + index * (2 * digitSum + 1)`.
  *
  * @param {number} count - Number of elements
  * @param {number} [digits=3] - Digits per element
@@ -398,10 +407,10 @@ const array = (count, digits = 3, options = {}) => {
   _assertInt(count, 'count', 0, 10000);
   _assertInt(digits, 'digits', 1, MAX_DIGITS);
   const seed = _normalizeSeed(options.seed);
+  const step = _subSeedStep(seed);
   const result = [];
   for (let i = 0; i < count; i++) {
-    const subSeed = seed + i * _digitProduct(seed);
-    result.push(_fillDigits(_normalizeSeed(subSeed), digits));
+    result.push(_fillDigits(_normalizeSeed(seed + i * step), digits));
   }
   return result;
 };
@@ -565,6 +574,8 @@ const roulette = (options = {}) => {
 
 /**
  * Play rock, paper, scissors deterministically.
+ * Index is (seed + digitSum) mod 3. The digit product was used before 1.1.1,
+ * but it is divisible by 3 for most seeds and chose rock ~90% of the time.
  *
  * @param {Object} [options={}] - Options
  * @param {number|string} [options.seed] - Custom seed (default: 814)
@@ -572,7 +583,7 @@ const roulette = (options = {}) => {
  */
 const rps = (options = {}) => {
   const seed = _normalizeSeed(options.seed);
-  return RPS_OPTIONS[_digitProduct(seed) % 3];
+  return RPS_OPTIONS[(seed + _digitSum(seed)) % 3];
 };
 
 /**
@@ -626,6 +637,8 @@ const fortune = (options = {}) => {
 
 /**
  * Spin a wheel (pick from an array) deterministically.
+ * Index is (seed + digitSum) mod length. Text seeds are always even, so a
+ * plain seed mod length could never reach odd positions of even-length lists.
  *
  * @param {Array} arr - Array of choices
  * @param {Object} [options={}] - Options
@@ -637,7 +650,7 @@ const spin = (arr, options = {}) => {
     throw new Error('spin() requires a non-empty array');
   }
   const seed = _normalizeSeed(options.seed);
-  return arr[seed % arr.length];
+  return arr[(seed + _digitSum(seed)) % arr.length];
 };
 
 /**
@@ -660,11 +673,11 @@ const roll = (notation, options = {}) => {
   const modifier = match[3] ? parseInt(match[3], 10) : 0;
   _assertInt(count, 'dice count', 1, 1000);
   _assertInt(sides, 'sides', 1);
-  const dp = _digitProduct(seed);
+  const step = _subSeedStep(seed);
 
   const rolls = [];
   for (let i = 0; i < count; i++) {
-    const val = ((seed + i * dp) % sides) + 1;
+    const val = ((seed + i * step) % sides) + 1;
     rolls.push(val);
   }
 

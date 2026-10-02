@@ -21,7 +21,7 @@ const SUIT_SYMBOL: Record<string, string> = { Spades: '♠', Hearts: '♥', Diam
 
 /** Translate a profile into display cards with plain-language derivation notes. */
 export const cardsFor = (p: Profile): CardSpec[] => {
-  const { digitSum, digitProduct, firstDigit } = p.derived;
+  const { digitSum, firstDigit } = p.derived;
   const seedStr = String(p.seed);
   const last2 = seedStr.length >= 2 ? seedStr.slice(-2) : seedStr;
   const suit = p.card.split(' of ')[1];
@@ -82,7 +82,7 @@ export const cardsFor = (p: Profile): CardSpec[] => {
       label: 'roll 2d6',
       value: p.roll.rolls.join(' + ') + ` = ${p.roll.total}`,
       copy: `2d6: ${p.roll.rolls.join(', ')} (total ${p.roll.total})`,
-      note: `each die is (seed + i × digit product ${digitProduct}) mod 6 + 1`,
+      note: `each die is (seed + i × ${2 * digitSum + 1}) mod 6 + 1, step = 2 × digit sum + 1`,
       kind: 'number',
     },
     {
@@ -90,7 +90,7 @@ export const cardsFor = (p: Profile): CardSpec[] => {
       label: 'rock, paper, scissors',
       value: p.rps,
       copy: p.rps,
-      note: `digit product ${digitProduct} mod 3 → ${p.rps}`,
+      note: `(seed + digit sum ${digitSum}) mod 3 → ${p.rps}`,
       kind: 'word',
     },
     {
