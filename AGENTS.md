@@ -31,16 +31,21 @@ netlify.toml             deploy config (base web/, publish dist/); production is
 1. **Outputs are frozen.** `test/snapshot.test.js` locks every public function's result for
    seed 814, `"brian"` and several other seeds. Do not change an existing output. If a change
    is unavoidable it is a breaking change: bump the major version and update the snapshot in
-   the same commit with an explanation in CHANGELOG.md.
-2. **No randomness in the library or site except `randomSeed()`.** Every other code path must
+   the same commit with an explanation in CHANGELOG.md. (One exception was made in 1.1.1 for
+   a genuine defect in `rps`, `roll`, `array` and `spin`; see CHANGELOG.)
+2. **Uneven is fine, dominated is not.** Results derive from the seed's digits, so they are
+   lumpy on purpose. But no option should swamp the others (rock used to win ~90%). Avoid
+   using the digit product as a modulus or stride: it is 0 for any seed containing a 0 digit
+   and divisible by 3 for most seeds. Text seeds always hash to an even number.
+3. **No randomness in the library or site except `randomSeed()`.** Every other code path must
    be a pure function of the seed. The site's digit-cycling animation derives its frames from
    the seed, not from `Math.random()`.
-3. **Validate at the public boundary.** Public functions throw `RangeError` on invalid
+4. **Validate at the public boundary.** Public functions throw `RangeError` on invalid
    numeric arguments. Never return `NaN`.
-4. **100% coverage** on `index.js` and clean ESLint are required. CI enforces both.
-5. **Node 20+** for the library. The web app needs Node 22+.
-6. **Keep the ASCII art header** at the top of `index.js`.
-7. **Update CHANGELOG.md** for any user-facing change.
+5. **100% coverage** on `index.js` and clean ESLint are required. CI enforces both.
+6. **Node 20+** for the library. The web app needs Node 22+.
+7. **Keep the ASCII art header** at the top of `index.js`.
+8. **Update CHANGELOG.md** for any user-facing change.
 
 ## Commands
 

@@ -18,7 +18,7 @@ export const buildOpenApi = (origin: string) => ({
   openapi: '3.1.0',
   info: {
     title: 'pdrng API',
-    version: '1.1.0',
+    version: '1.1.1',
     summary: 'Pseudo Deterministic Random Number Generator. Same seed, same output.',
     description:
       'Every route takes a `seed` and returns the same answer for that seed, forever. ' +

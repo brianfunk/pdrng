@@ -5,6 +5,9 @@ import * as p from '../index.js';
  * Frozen outputs. These values are the public contract of pdrng:
  * seed 814 (and the text seed "brian") must keep producing exactly these results.
  * Any change here is a breaking change and requires a major version bump.
+ *
+ * Exception, 1.1.1: rps, spin, roll and array were re-derived because the digit
+ * product skewed them (rock ~90%, identical dice for a third of seeds). See CHANGELOG.
  */
 const SNAPSHOT = {
   '7': {
@@ -18,8 +21,8 @@ const SNAPSHOT = {
     'range50_60': 57,
     'array3_2': [
       77,
-      14,
-      21
+      22,
+      37
     ],
     'uuid': '7e5c7e5c-7e5c-4e5c-be5c-e5c3e5c318f6',
     'oddOrEven': 'odd',
@@ -33,19 +36,19 @@ const SNAPSHOT = {
       'color': 'red',
       'parity': 'odd'
     },
-    'rps': 'paper',
+    'rps': 'scissors',
     'magic8': 'Outlook good.',
     'zodiac': 'Scorpio',
     'tarot': 'Strength',
     'fortune': 'A good time to finish up old tasks.',
-    'spin': 'd',
+    'spin': 'c',
     'roll': {
       'rolls': [
         2,
-        3
+        5
       ],
       'modifier': 3,
-      'total': 8
+      'total': 10
     },
     'bingo': 'B-7',
     'color': '#977777'
@@ -61,8 +64,8 @@ const SNAPSHOT = {
     'range50_60': 59,
     'array3_2': [
       42,
-      50,
-      58
+      55,
+      68
     ],
     'uuid': 'a18f6d4b-8f6d-4b29-a907-07e529078f6d',
     'oddOrEven': 'even',
@@ -76,19 +79,19 @@ const SNAPSHOT = {
       'color': 'red',
       'parity': 'odd'
     },
-    'rps': 'scissors',
+    'rps': 'rock',
     'magic8': 'Without a doubt.',
     'zodiac': 'Libra',
     'tarot': 'The World',
     'fortune': 'A good friendship is often more important than a passionate romance.',
-    'spin': 'c',
+    'spin': 'a',
     'roll': {
       'rolls': [
         1,
-        3
+        2
       ],
       'modifier': 3,
-      'total': 7
+      'total': 6
     },
     'bingo': 'N-42',
     'color': '#642424'
@@ -104,8 +107,8 @@ const SNAPSHOT = {
     'range50_60': 50,
     'array3_2': [
       14,
-      46,
-      78
+      41,
+      68
     ],
     'uuid': 'e5c3d4b2-07e5-4f6d-9b29-b290e5c307e5',
     'oddOrEven': 'even',
@@ -124,14 +127,14 @@ const SNAPSHOT = {
     'zodiac': 'Gemini',
     'tarot': 'The Magician',
     'fortune': 'The answer you seek was never in doubt.',
-    'spin': 'c',
+    'spin': 'd',
     'roll': {
       'rolls': [
         5,
-        1
+        2
       ],
       'modifier': 3,
-      'total': 9
+      'total': 10
     },
     'bingo': 'B-14',
     'color': '#a81414'
@@ -147,8 +150,8 @@ const SNAPSHOT = {
     'range50_60': 51,
     'array3_2': [
       0,
-      0,
-      0
+      3,
+      6
     ],
     'uuid': '07e518f6-07e5-48f6-97e5-18f607e507e5',
     'oddOrEven': 'even',
@@ -162,19 +165,19 @@ const SNAPSHOT = {
       'color': 'green',
       'parity': 'zero'
     },
-    'rps': 'rock',
+    'rps': 'scissors',
     'magic8': 'It is certain.',
     'zodiac': 'Aries',
     'tarot': 'Death',
     'fortune': 'A dubious friend may be an enemy in camouflage.',
-    'spin': 'a',
+    'spin': 'b',
     'roll': {
       'rolls': [
         5,
-        5
+        2
       ],
       'modifier': 3,
-      'total': 13
+      'total': 10
     },
     'bingo': 'O-75',
     'color': '#30'
@@ -190,8 +193,8 @@ const SNAPSHOT = {
     'range50_60': 50,
     'array3_2': [
       14,
-      46,
-      78
+      41,
+      68
     ],
     'uuid': 'e5c3d4b2-07e5-4f6d-9b29-b290e5c307e5',
     'oddOrEven': 'even',
@@ -210,14 +213,14 @@ const SNAPSHOT = {
     'zodiac': 'Gemini',
     'tarot': 'The Magician',
     'fortune': 'The answer you seek was never in doubt.',
-    'spin': 'c',
+    'spin': 'd',
     'roll': {
       'rolls': [
         5,
-        1
+        2
       ],
       'modifier': 3,
-      'total': 9
+      'total': 10
     },
     'bingo': 'B-14',
     'color': '#a81414'
@@ -233,8 +236,8 @@ const SNAPSHOT = {
     'range50_60': 55,
     'array3_2': [
       55,
-      10,
-      15
+      16,
+      27
     ],
     'uuid': '5c3a5c3a-5c3a-4c3a-9c3a-a18fa18f907e',
     'oddOrEven': 'odd',
@@ -248,12 +251,12 @@ const SNAPSHOT = {
       'color': 'red',
       'parity': 'odd'
     },
-    'rps': 'scissors',
+    'rps': 'paper',
     'magic8': 'As I see it, yes.',
     'zodiac': 'Virgo',
     'tarot': 'The Lovers',
     'fortune': 'A golden egg of opportunity falls into your lap this month.',
-    'spin': 'b',
+    'spin': 'c',
     'roll': {
       'rolls': [
         6,
@@ -276,8 +279,8 @@ const SNAPSHOT = {
     'range50_60': 58,
     'array3_2': [
       44,
-      72,
-      0
+      77,
+      10
     ],
     'uuid': 'c3a107e5-07e5-4f6d-8b29-c3a1c3a107e5',
     'oddOrEven': 'even',
@@ -300,10 +303,10 @@ const SNAPSHOT = {
     'roll': {
       'rolls': [
         5,
-        1
+        2
       ],
       'modifier': 3,
-      'total': 9
+      'total': 10
     },
     'bingo': 'N-44',
     'color': '#a84444'
@@ -319,8 +322,8 @@ const SNAPSHOT = {
     'range50_60': 56,
     'array3_2': [
       56,
-      16,
-      76
+      93,
+      30
     ],
     'uuid': '4b292907-8f6d-4b29-ad4b-6d4bc3a107e5',
     'oddOrEven': 'even',
@@ -339,14 +342,14 @@ const SNAPSHOT = {
     'zodiac': 'Sagittarius',
     'tarot': 'The Magician',
     'fortune': 'Accept something that you cannot change, and you will feel better.',
-    'spin': 'a',
+    'spin': 'c',
     'roll': {
       'rolls': [
         1,
-        1
+        2
       ],
       'modifier': 3,
-      'total': 5
+      'total': 6
     },
     'bingo': 'G-56',
     'color': '#643564'

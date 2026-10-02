@@ -88,7 +88,7 @@ range(1, 100)     // 14
 #### `array(count, digits?, options?)`
 
 ```javascript
-array(3, 2)       // [14, 46, 78] (sub-seeds per element)
+array(3, 2)       // [14, 41, 68] (sub-seed per element: seed + i × (2 × digitSum + 1))
 ```
 
 #### `uuid(options?)`
@@ -198,7 +198,7 @@ fortune()         // "The answer you seek was never in doubt."
 Deterministic selection from an array.
 
 ```javascript
-spin(['a', 'b', 'c', 'd'])  // "c"
+spin(['a', 'b', 'c', 'd'])  // "d"
 ```
 
 #### `roll(notation, options?)`
@@ -206,7 +206,7 @@ spin(['a', 'b', 'c', 'd'])  // "c"
 Deterministic dice notation result (tabletop RPG style).
 
 ```javascript
-roll('2d6+3')     // { rolls: [5, 1], modifier: 3, total: 9 }
+roll('2d6+3')     // { rolls: [5, 2], modifier: 3, total: 10 }
 ```
 
 #### `bingo(options?)`
@@ -291,6 +291,8 @@ pdrng(20)       // RangeError: digits must be an integer between 1 and 15, recei
 ## Frozen Outputs
 
 Outputs for a given seed are a contract. `test/snapshot.test.js` locks every function's result for seed 814, the text seed `"brian"`, and several others. Any change to those values is a breaking change and ships as a new major version.
+
+Distributions are deliberately uneven: results come from the seed's digits, not from a uniform generator. Text seeds always hash to an even number, so `oddOrEven` is `"even"` for every word. That is by design.
 
 ## Website and API
 
