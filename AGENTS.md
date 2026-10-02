@@ -23,7 +23,7 @@ web/                     Vite + React 19 + TypeScript + Tailwind v4 site
 web/src/lib/routes.ts    API route table (single source for router + OpenAPI)
 web/src/lib/api.ts       request handler, used by Netlify and by the Vite dev middleware
 web/netlify/functions/   Netlify Functions v2 entry point
-netlify.toml             deploy config (base web/, publish dist/)
+netlify.toml             deploy config (base web/, publish dist/); production is https://pdrng.com
 ```
 
 ## Hard rules

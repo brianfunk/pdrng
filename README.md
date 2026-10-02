@@ -13,10 +13,10 @@
 
 A seed is any text or number. Text is hashed to a number (`brian` → 814, the default). From that number pdrng derives everything else: a playing card, a roulette pocket, a tarot card, a Magic 8-Ball answer, a zodiac sign, a hex color, a bingo call, dice results. The same seed always produces the same results.
 
-**Site:** [pdrng.netlify.app](https://pdrng.netlify.app) · **API docs:** [pdrng.netlify.app/api/docs](https://pdrng.netlify.app/api/docs)
+**Site:** [pdrng.com](https://pdrng.com) · **API docs:** [pdrng.com/api/docs](https://pdrng.com/api/docs) · **OpenAPI:** [pdrng.com/api/openapi.json](https://pdrng.com/api/openapi.json)
 
 ```bash
-curl "https://pdrng.netlify.app/api/v1/profile?seed=brian"
+curl "https://pdrng.com/api/v1/profile?seed=brian"
 ```
 
 ```javascript

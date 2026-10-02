@@ -55,7 +55,7 @@
   "bugs": {
     "url": "https://github.com/brianfunk/pdrng/issues"
   },
-  "homepage": "https://github.com/brianfunk/pdrng#readme",
+  "homepage": "https://pdrng.com",
   "engines": {
     "node": ">=20.0.0"
   },

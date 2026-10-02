@@ -7,6 +7,7 @@
   Everyone whose name hashes to something interesting.
 
 /* SITE */
+  URL: https://pdrng.com
   Last update: 2026/10/01
   Standards: HTML5, CSS3, ES2022, OpenAPI 3.1
   Components: React 19, Vite, Tailwind CSS 4, Netlify Functions

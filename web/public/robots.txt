@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pdrng.netlify.app/sitemap.xml
+Sitemap: https://pdrng.com/sitemap.xml

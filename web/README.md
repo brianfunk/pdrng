@@ -24,4 +24,4 @@ curl "localhost:5173/api/v1/dice?seed=brian&sides=20"
 open  http://localhost:5173/api/docs
 ```
 
-Deployment is configured by `../netlify.toml`: base `web/`, publish `dist/`, functions bundled with esbuild, SPA fallback for everything the API does not claim.
+Production is https://pdrng.com (DNS on Cloudflare, hosting on Netlify). Deployment is configured by `../netlify.toml`: base `web/`, publish `dist/`, functions bundled with esbuild, SPA fallback for everything the API does not claim.
