@@ -34,7 +34,7 @@ export default function App() {
         />
         {jsonOpen && <JsonDrawer profile={profile} apiPath={apiPath} />}
         <section
-          className="mx-auto mt-6 grid w-full max-w-5xl grid-cols-1 gap-3 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-3"
+          className="mx-auto mt-6 grid w-full max-w-5xl grid-cols-2 gap-2 px-4 sm:px-6 md:grid-cols-4 md:gap-3"
           aria-label="Derived results"
         >
           {cards.map((spec) => (

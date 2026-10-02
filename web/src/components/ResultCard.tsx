@@ -11,7 +11,7 @@ const Value = ({ spec }: { spec: CardSpec }) => {
     case 'color':
       return (
         <span className="flex items-center gap-3">
-          <span className="size-6 border border-line" style={{ background: spec.accent }} aria-hidden />
+          <span className="size-5 shrink-0 border border-line" style={{ background: spec.accent }} aria-hidden />
           <span>{spec.value}</span>
         </span>
       );
@@ -20,7 +20,7 @@ const Value = ({ spec }: { spec: CardSpec }) => {
     case 'card':
       return <span>{spec.accent} {spec.value}</span>;
     case 'mono':
-      return <span className="break-all text-sm sm:text-base">{spec.value}</span>;
+      return <span className="break-all text-xs sm:text-sm">{spec.value}</span>;
     default:
       return <span>{spec.value}</span>;
   }
@@ -30,7 +30,7 @@ export const ResultCard = ({ spec, copied, onCopy }: Props) => (
   <button
     type="button"
     onClick={() => onCopy(spec.id, spec.copy)}
-    className="focus-ring group flex min-h-32 flex-col border border-soft p-4 text-left hover:border-line"
+    className="focus-ring group flex min-h-36 flex-col border border-soft p-3 text-left hover:border-line sm:p-4"
     aria-label={`${spec.label}: ${spec.copy}. Click to copy.`}
   >
     <span className="flex items-baseline justify-between text-xs uppercase tracking-[0.14em] text-muted">
@@ -39,9 +39,9 @@ export const ResultCard = ({ spec, copied, onCopy }: Props) => (
         {copied ? 'copied' : 'copy'}
       </span>
     </span>
-    <span className="mt-3 flex-1 text-xl font-bold leading-snug sm:text-2xl">
+    <span className="mt-2 flex-1 break-words text-base font-bold leading-snug sm:text-lg">
       <Value spec={spec} />
     </span>
-    <span className="mt-3 text-xs leading-relaxed text-muted">{spec.note}</span>
+    <span className="mt-3 text-[11px] leading-relaxed text-muted">{spec.note}</span>
   </button>
 );
